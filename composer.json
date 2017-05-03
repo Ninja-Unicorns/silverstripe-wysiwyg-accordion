@@ -1,0 +1,33 @@
+{
+  "name": "ninja-unicorns/wysiwyg-accordion",
+  "description": "Easily place an accordion in the wysiwyg via a related set of AccordionItems",
+  "type": "silverstripe-module",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "Ninja Unicorns",
+    "silverstripe",
+    "Shortcode",
+    "Accordion",
+    "Ninja",
+    "Unicorns"
+  ],
+  "authors": [
+    {
+      "name": "Ninja Unicorns",
+      "email": "ninja-unicorns@silverstripe.com"
+    }
+  ],
+  "require": {
+    "silverstripe/framework": "^3.2",
+    "silverstripe/cms": "^3.2",
+    "silverstripe-australia/gridfieldextensions": "^1.4"
+  },
+  "suggest": {
+    "sheadawson/silverstripe-shortcodable": "Use Shortcodable to easily insert the shortcode",
+    "unclecheese/betterbuttons": "With better buttons, you can use the create new, save and close, etc. on items"
+  },
+  "extra": {
+    "installer-name": "wysiwyg-accordion"
+  },
+  "target-dir": "wysiwyg-accordion"
+}

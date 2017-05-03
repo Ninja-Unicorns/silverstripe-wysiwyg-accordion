@@ -1,0 +1,13 @@
+Page:
+  page1:
+    Title: 'TestPage'
+    Content: ""
+AccordionItem:
+  item1:
+    Title: 'AccordionItem1'
+    Content: 'Hello'
+    Page: =>Page.page1
+  item2:
+    Title: 'AccordionItem2'
+    Content: 'Hello2'
+    Page: =>Page.page1
