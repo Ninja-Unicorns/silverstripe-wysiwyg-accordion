@@ -17,16 +17,19 @@ class AccordionPageExtension extends DataExtension
 
     public function updateCMSFields(FieldList $fields)
     {
-        $helptext = _t('Accordion.HELP', self::$description);
-        $helpField = LiteralField::create('Help', $helptext);
-        $gridFieldConfig = GridFieldConfig_RecordEditor::create();
-        $gridFieldConfig->addComponent(new GridFieldOrderableRows('SortOrder'));
-        $accordionGrid = GridField::create('AccordionItems', 'AccordionItems', $this->owner->AccordionItems(),
-            $gridFieldConfig);
-        $gridFieldConfig->removeComponentsByType('GridFieldAddExistingAutocompleter');
-        $fields->addFieldsToTab('Root.Accordion', [
-            $helpField,
-            $accordionGrid
-        ]);
+        $blacklistedPages = Config::inst()->get(self::class, 'PageBlacklist')?: [];
+        if(!count($blacklistedPages) || !in_array($this->owner->ClassName, $blacklistedPages, true)) {
+            $helptext = _t('Accordion.HELP', self::$description);
+            $helpField = LiteralField::create('Help', $helptext);
+            $gridFieldConfig = GridFieldConfig_RecordEditor::create();
+            $gridFieldConfig->addComponent(new GridFieldOrderableRows('SortOrder'));
+            $accordionGrid = GridField::create('AccordionItems', 'AccordionItems', $this->owner->AccordionItems(),
+                $gridFieldConfig);
+            $gridFieldConfig->removeComponentsByType('GridFieldAddExistingAutocompleter');
+            $fields->addFieldsToTab('Root.Accordion', [
+                $helpField,
+                $accordionGrid
+            ]);
+        }
     }
 }

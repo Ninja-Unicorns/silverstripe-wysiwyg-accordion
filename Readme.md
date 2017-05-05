@@ -14,6 +14,13 @@ Use `[accordion]` in the wysiwyg and create the accordion items accordingly!
 
 The items can be ordered using drag-and-drop on the gridfield overview.
 
+If you don't want the accordion option on certain pages, add the blacklisted pagetypes to your yml like this:
+```yaml
+AccordionPageExtension:
+  PageBlacklist:
+    - HomePage
+```
+
 ## Reason
 
 We've run in to it a few times, when clients want an accordion that's easy to place in the WYSIWYG editor. Often, it then comes down to Content Author precision on selecting the right styling so some javascript can be applied to make the accordion work.
@@ -40,7 +47,7 @@ Yep
 
 - [ ] Multiple accordions on one page?
 - [ ] Nested accordions?
-- [ ] Blacklist certain page types, so the accordion option won't show or work (useful for pages that should not have an accordion, making sure authors don't accidentally create one anyway).
+- [x] Blacklist certain page types, so the accordion option won't show or work (useful for pages that should not have an accordion, making sure authors don't accidentally create one anyway).
 
 ## Did you say Ninja Unicorns?
 
