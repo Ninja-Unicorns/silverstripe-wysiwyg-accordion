@@ -9,7 +9,7 @@ class AccordionParser
 {
     public static function get_shortcodes()
     {
-        return ['code'];
+        return ['accordion'];
     }
 
     /**
@@ -31,5 +31,6 @@ class AccordionParser
 
             return $ssViewer->process($accordionItems);
         }
+        return '[accordion]';
     }
 }
