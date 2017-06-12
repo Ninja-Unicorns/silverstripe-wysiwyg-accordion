@@ -4,9 +4,16 @@
  * Class AccordionParser
  *
  * Parse the shortcode and return the rendered accordion template
+ * Parsing requires a page reference which is taken from Page_Controller by default
+ * In the case Page_Controller is not available there is an option to manually inject page reference before parsing
  */
 class AccordionParser
 {
+    /**
+     * @var Page
+     */
+    private static $page = null;
+
     public static function get_shortcodes()
     {
         return ['accordion'];
@@ -23,14 +30,44 @@ class AccordionParser
      */
     public static function handle_shortcode($arguments, $code, $parser, $shortcode, $extra = array())
     {
-        // Only if we're on a Page, so the CMS doesn't crash.
+        // page controller, this is the default case
         if (Controller::curr() instanceof Page_Controller) {
-            $accordionItems = Controller::curr()->dataRecord;
-            $template = 'AccordionItems';
-            $ssViewer = new SSViewer($template);
-
-            return $ssViewer->process($accordionItems);
+            // Only if we're on a Page, so the CMS doesn't crash.
+            $page = Controller::curr()->dataRecord;
         }
-        return '[accordion]';
+        // attempt to load page via custom loader
+        else {
+            $page = static::$page;
+        }
+
+        // no page available, abort shortcode parsing
+        if (is_null($page)) {
+            return '[accordion]';
+        }
+
+        // render accordion
+        $template = 'AccordionItems';
+        $ssViewer = new SSViewer($template);
+
+        return $ssViewer->process($page);
+    }
+
+    /**
+     * Use this in the custom parsing case (non Page_Controller case)
+     * this is handy in cases where page can't be injected via controller
+     * page has to support accordions
+     * @param Page $page
+     */
+    public static function setPage(Page $page)
+    {
+        static::$page = $page;
+    }
+
+    /**
+     * Clear the page after custom parsing
+     */
+    public static function clearPage()
+    {
+        static::$page = null;
     }
 }
