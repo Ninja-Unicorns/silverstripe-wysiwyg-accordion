@@ -23,6 +23,8 @@ class AccordionItem extends DataObject
         'Page' => 'Page'
     ];
 
+    private static $default_sort = 'SortOrder ASC';
+
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();

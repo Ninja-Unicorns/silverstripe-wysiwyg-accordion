@@ -23,13 +23,17 @@ class AccordionPageExtension extends DataExtension
             $helpField = LiteralField::create('Help', $helptext);
             $gridFieldConfig = GridFieldConfig_RecordEditor::create();
             $gridFieldConfig->addComponent(new GridFieldOrderableRows('SortOrder'));
-            $accordionGrid = GridField::create('AccordionItems', 'AccordionItems', $this->owner->AccordionItems(),
-                $gridFieldConfig);
+            $accordionGrid = GridField::create(
+                'AccordionItems', 'AccordionItems', $this->owner->AccordionItems(),
+                $gridFieldConfig
+            );
             $gridFieldConfig->removeComponentsByType('GridFieldAddExistingAutocompleter');
-            $fields->addFieldsToTab('Root.Accordion', [
+            $fields->addFieldsToTab(
+                'Root.Accordion', [
                 $helpField,
                 $accordionGrid
-            ]);
+                ]
+            );
         }
     }
 }

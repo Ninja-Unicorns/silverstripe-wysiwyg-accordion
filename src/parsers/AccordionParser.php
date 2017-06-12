@@ -13,11 +13,11 @@ class AccordionParser
     }
 
     /**
-     * @param string $arguments array with the type
-     * @param array $code string of the code to parse
-     * @param ShortcodeParser $parser Parser root user.
-     * @param string $shortcode
-     * @param array $extra
+     * @param string          $arguments array with the type
+     * @param array           $code      string of the code to parse
+     * @param ShortcodeParser $parser    Parser root user.
+     * @param string          $shortcode
+     * @param array           $extra
      *
      * @return String of parsed code.
      */
