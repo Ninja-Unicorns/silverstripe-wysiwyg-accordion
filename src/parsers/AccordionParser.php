@@ -20,8 +20,8 @@ class AccordionParser
     }
 
     /**
-     * @param string          $arguments array with the type
-     * @param array           $code      string of the code to parse
+     * @param array           $arguments array with the type
+     * @param string          $code      string of the code to parse
      * @param ShortcodeParser $parser    Parser root user.
      * @param string          $shortcode
      * @param array           $extra
@@ -48,8 +48,13 @@ class AccordionParser
         // render accordion
         $template = 'AccordionItems';
         $ssViewer = new SSViewer($template);
+        $accordionId = (array_key_exists('id', $arguments)) ? $arguments['id'] : 1;
+        $accordion = ArrayData::create([
+            'AccordionId' => $accordionId,
+            'AccordionItems' => $page->AccordionItems()->filter(['AccordionSet' => $accordionId])
+        ]);
 
-        return $ssViewer->process($page);
+        return $ssViewer->process($accordion);
     }
 
     /**
