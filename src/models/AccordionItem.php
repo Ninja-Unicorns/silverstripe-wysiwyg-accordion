@@ -66,4 +66,36 @@ class AccordionItem extends DataObject
         return $fields;
     }
 
+
+    /**
+     * Check if this page is new - that is, if it has yet to have been written to the database.
+     *
+     * @return bool
+     */
+    public function isNew() {
+        /**
+         * This check was a problem for a self-hosted site, and may indicate a bug in the interpreter on their server,
+         * or a bug here. Changing the condition from empty($this->ID) to !$this->ID && !$this->record['ID'] fixed this.
+         */
+        if(empty($this->ID)) return true;
+
+        if(is_numeric($this->ID)) return false;
+
+        return stripos($this->ID, 'new') === 0;
+    }
+
+
+    /**
+     * Check if this page has been published.
+     *
+     * @return bool
+     */
+    public function isPublished() {
+        if($this->isNew())
+            return false;
+
+        $latest = Versioned::get_latest_version(static::class, $this->ID);
+        return $latest->WasPublished;
+    }
+
 }

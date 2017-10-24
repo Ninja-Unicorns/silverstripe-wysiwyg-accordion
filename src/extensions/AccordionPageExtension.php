@@ -17,12 +17,19 @@ class AccordionPageExtension extends DataExtension
 
     public function updateCMSFields(FieldList $fields)
     {
+        if (class_exists('GridFieldSiteTreeState')) {
+            Requirements::css(LUMBERJACK_DIR . "/css/lumberjack.css");
+        }
+
         $blacklistedPages = Config::inst()->get(self::class, 'PageBlacklist')?: [];
         if(!count($blacklistedPages) || !in_array($this->owner->ClassName, $blacklistedPages, true)) {
             $helptext = _t('Accordion.HELP', self::$description);
             $helpField = LiteralField::create('Help', $helptext);
             $gridFieldConfig = GridFieldConfig_RecordEditor::create();
             $gridFieldConfig->addComponent(new GridFieldOrderableRows('SortOrder'));
+            if (class_exists('GridFieldSiteTreeState')) {
+                $gridFieldConfig->addComponent(new GridFieldSiteTreeState());
+            }
             $accordionGrid = GridField::create(
                 'AccordionItems', 'AccordionItems', $this->owner->AccordionItems(),
                 $gridFieldConfig
