@@ -9,7 +9,7 @@
  */
 class AccordionPageExtension extends DataExtension
 {
-    private static $description = '<p>Create Accordion items here, the title will be the header and the content will show on click. To add the accordion in the content, simply put [accordion] in the WYSIWYG editor at the place where you want the accordion to appear.</p>';
+    private static $description = '<p><h4>Note</h4>Create Accordion items here, the title will be the header and the content will show on click.<br />To add the accordion in the content, put <strong>[accordion,id=1]</strong> in the WYSIWYG editor at the place where you want the accordion to appear.<br /><u>Replace the 1 with the actual set you want to render.</u></p>';
 
     private static $has_many = [
         'AccordionItems' => 'AccordionItem'

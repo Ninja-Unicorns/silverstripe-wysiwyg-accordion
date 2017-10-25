@@ -41,17 +41,17 @@ class AccordionItem extends DataObject
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-
+        $fields->addFieldToTab('Root.Main', LiteralField::create('message', '<h5></h5>'), 'Title');
         /** @var $accordion NumericField */
         $accordion = $fields->fieldByName('Root.Main.AccordionSet');
-        $description = 'All items that share the same accordion have to have the same accordion ID, accordion shortcode is [accordion,id=ID]';
+        $description = 'All items that share the same accordion have to have the same accordion ID, accordion shortcode is [accordion,id=ID]<br /><br /><strong>Important:</strong> Do not attempt to add an accordionset with the same ID as this accordion in the content.';
         $accordionIds = $this->Page()->AccordionItems()->column('AccordionSet');
 
         if (count($accordionIds) > 0) {
             $accordionIds = array_unique($accordionIds);
             sort($accordionIds, SORT_NUMERIC);
 
-            $description.= ' This page currently has following accordion IDs: ' . implode(', ', $accordionIds);
+            $description.= '<br /><br />This page currently has following accordion IDs: ' . implode(', ', $accordionIds);
         }
 
         $accordion->setDescription($description);
