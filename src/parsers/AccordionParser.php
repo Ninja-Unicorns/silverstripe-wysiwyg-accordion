@@ -53,9 +53,10 @@ class AccordionParser
                 'AccordionId' => $arguments['id'],
                 'AccordionItems' => $page->AccordionItems()->filter(['AccordionSet' => $arguments['id']])
             ]);
+            return $ssViewer->process($accordion);
         }
+        return '';
 
-        return $ssViewer->process($accordion);
     }
 
     /**
