@@ -66,6 +66,23 @@ class AccordionItem extends DataObject
         return $fields;
     }
 
+    public function canDelete($member = null)
+    {
+        $can = parent::canDelete($member);
+        if ($this->wasPublished()) {
+            return false;
+        }
+        return $can;
+    }
+
+    public function onBeforeDelete()
+    {
+        parent::onBeforeDelete();
+        if ($this->isPublished()) {
+            $this->deleteFromStage('Live');
+        }
+    }
+
 
     /**
      * Check if this page is new - that is, if it has yet to have been written to the database.
@@ -94,8 +111,18 @@ class AccordionItem extends DataObject
         if($this->isNew())
             return false;
 
-        $latest = Versioned::get_latest_version(static::class, $this->ID);
-        return $latest->WasPublished;
+        $isPublished = (DB::prepared_query("SELECT \"ID\" FROM \"AccordionItem_Live\" WHERE \"ID\" = ?", array($this->ID))->value());
+        if ($isPublished) {
+            return Versioned::get_latest_version(static::class, $this->ID)->WasPublished;
+        }
+        return $isPublished;
+    }
+
+    public function wasPublished()
+    {
+        return (DB::prepared_query("SELECT \"ID\" FROM \"AccordionItem_Live\" WHERE \"ID\" = ?", array($this->ID))->value())
+            ? true
+            : false;
     }
 
 }
