@@ -6,8 +6,10 @@ AccordionItem:
   item1:
     Title: 'AccordionItem1'
     Content: 'Hello'
+    AccordionSet: 1
     Page: =>Page.page1
   item2:
     Title: 'AccordionItem2'
     Content: 'Hello2'
+    AccordionSet: 1
     Page: =>Page.page1

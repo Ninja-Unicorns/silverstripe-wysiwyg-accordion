@@ -19,7 +19,7 @@ class AccordionTest extends SapphireTest
     {
         /** @var $page Page */
         $page = $this->objFromFixture('Page', 'page1');
-        $page->Content = '[accordion]';
+        $page->Content = '[accordion id=1]';
         $this->objFromFixture('AccordionItem', 'item1');
         $this->objFromFixture('AccordionItem', 'item2');
 

@@ -48,11 +48,12 @@ class AccordionParser
         // render accordion
         $template = 'AccordionItems';
         $ssViewer = new SSViewer($template);
-        $accordionId = (array_key_exists('id', $arguments)) ? $arguments['id'] : 1;
-        $accordion = ArrayData::create([
-            'AccordionId' => $accordionId,
-            'AccordionItems' => $page->AccordionItems()->filter(['AccordionSet' => $accordionId])
-        ]);
+        if (array_key_exists('id', $arguments)) {
+            $accordion = ArrayData::create([
+                'AccordionId' => $arguments['id'],
+                'AccordionItems' => $page->AccordionItems()->filter(['AccordionSet' => $arguments['id']])
+            ]);
+        }
 
         return $ssViewer->process($accordion);
     }
