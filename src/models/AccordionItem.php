@@ -75,9 +75,9 @@ class AccordionItem extends DataObject
         return $can;
     }
 
-    public function onBeforeDelete()
+    public function onAfterDelete()
     {
-        parent::onBeforeDelete();
+        parent::onAfterDelete();
         if ($this->isPublished()) {
             $this->deleteFromStage('Live');
         }
