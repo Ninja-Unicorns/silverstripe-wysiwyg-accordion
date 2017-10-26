@@ -20,11 +20,11 @@ class AccordionParser
     }
 
     /**
-     * @param array           $arguments array with the type
-     * @param string          $code      string of the code to parse
-     * @param ShortcodeParser $parser    Parser root user.
-     * @param string          $shortcode
-     * @param array           $extra
+     * @param array $arguments array with the type
+     * @param string $code string of the code to parse
+     * @param ShortcodeParser $parser Parser root user.
+     * @param string $shortcode
+     * @param array $extra
      *
      * @return String of parsed code.
      */
@@ -34,8 +34,7 @@ class AccordionParser
         if (Controller::curr() instanceof Page_Controller) {
             // Only if we're on a Page, so the CMS doesn't crash.
             $page = Controller::curr()->dataRecord;
-        }
-        // attempt to load page via custom loader
+        } // attempt to load page via custom loader
         else {
             $page = static::$page;
         }
@@ -50,11 +49,13 @@ class AccordionParser
         $ssViewer = new SSViewer($template);
         if (array_key_exists('id', $arguments)) {
             $accordion = ArrayData::create([
-                'AccordionId' => $arguments['id'],
+                'AccordionId'    => $arguments['id'],
                 'AccordionItems' => $page->AccordionItems()->filter(['AccordionSet' => $arguments['id']])
             ]);
+
             return $ssViewer->process($accordion);
         }
+
         return '';
 
     }

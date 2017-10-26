@@ -21,8 +21,8 @@ class AccordionPageExtension extends DataExtension
             Requirements::css(LUMBERJACK_DIR . "/css/lumberjack.css");
         }
 
-        $blacklistedPages = Config::inst()->get(self::class, 'PageBlacklist')?: [];
-        if(!count($blacklistedPages) || !in_array($this->owner->ClassName, $blacklistedPages, true)) {
+        $blacklistedPages = Config::inst()->get(self::class, 'PageBlacklist') ?: [];
+        if (!count($blacklistedPages) || !in_array($this->owner->ClassName, $blacklistedPages, true)) {
             $helptext = _t('Accordion.HELP', self::$description);
             $helpField = LiteralField::create('Help', $helptext);
             $gridFieldConfig = GridFieldConfig_RecordEditor::create();
@@ -37,8 +37,8 @@ class AccordionPageExtension extends DataExtension
             $gridFieldConfig->removeComponentsByType('GridFieldAddExistingAutocompleter');
             $fields->addFieldsToTab(
                 'Root.Accordion', [
-                $helpField,
-                $accordionGrid
+                    $helpField,
+                    $accordionGrid
                 ]
             );
         }

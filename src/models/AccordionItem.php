@@ -2,7 +2,7 @@
 
 /**
  * Class AccordionItem
- * 
+ *
  * There are no permissions, as they're part of Page, and not a separate thing.
  *
  * @property string $Title
@@ -15,10 +15,10 @@
 class AccordionItem extends DataObject
 {
     private static $db = [
-        'Title'         => 'Varchar(255)',
-        'Content'       => 'HTMLText',
-        'AccordionSet'  => 'Int(1)',
-        'SortOrder'     => 'Int',
+        'Title'        => 'Varchar(255)',
+        'Content'      => 'HTMLText',
+        'AccordionSet' => 'Int(1)',
+        'SortOrder'    => 'Int',
     ];
 
     private static $has_one = [
@@ -29,7 +29,7 @@ class AccordionItem extends DataObject
      * @var array
      */
     private static $summary_fields = [
-        'Title' => 'Title',
+        'Title'        => 'Title',
         'AccordionSet' => 'Accordion ID',
     ];
 
@@ -51,7 +51,8 @@ class AccordionItem extends DataObject
             $accordionIds = array_unique($accordionIds);
             sort($accordionIds, SORT_NUMERIC);
 
-            $description.= '<br /><br />This page currently has following accordion IDs: ' . implode(', ', $accordionIds);
+            $description .= '<br /><br />This page currently has following accordion IDs: ' . implode(', ',
+                    $accordionIds);
         }
 
         $accordion->setDescription($description);
@@ -72,7 +73,15 @@ class AccordionItem extends DataObject
         if ($this->wasPublished()) {
             return false;
         }
+
         return $can;
+    }
+
+    public function wasPublished()
+    {
+        return DB::prepared_query('SELECT "ID" FROM "AccordionItem_Live" WHERE "ID" = ?', array($this->ID))->value()
+            ? true
+            : false;
     }
 
     public function onAfterDelete()
@@ -83,46 +92,46 @@ class AccordionItem extends DataObject
         }
     }
 
+    /**
+     * Check if this page has been published.
+     *
+     * @return bool
+     */
+    public function isPublished()
+    {
+        if ($this->isNew()) {
+            return false;
+        }
+
+        $isPublished = DB::prepared_query('SELECT "ID" FROM "AccordionItem_Live" WHERE "ID" = ?',
+            array($this->ID))->value();
+        if ($isPublished) {
+            return Versioned::get_latest_version(static::class, $this->ID)->WasPublished;
+        }
+
+        return $isPublished;
+    }
 
     /**
      * Check if this page is new - that is, if it has yet to have been written to the database.
      *
      * @return bool
      */
-    public function isNew() {
+    public function isNew()
+    {
         /**
          * This check was a problem for a self-hosted site, and may indicate a bug in the interpreter on their server,
          * or a bug here. Changing the condition from empty($this->ID) to !$this->ID && !$this->record['ID'] fixed this.
          */
-        if(empty($this->ID)) return true;
+        if (empty($this->ID)) {
+            return true;
+        }
 
-        if(is_numeric($this->ID)) return false;
+        if (is_numeric($this->ID)) {
+            return false;
+        }
 
         return stripos($this->ID, 'new') === 0;
-    }
-
-
-    /**
-     * Check if this page has been published.
-     *
-     * @return bool
-     */
-    public function isPublished() {
-        if($this->isNew())
-            return false;
-
-        $isPublished = (DB::prepared_query("SELECT \"ID\" FROM \"AccordionItem_Live\" WHERE \"ID\" = ?", array($this->ID))->value());
-        if ($isPublished) {
-            return Versioned::get_latest_version(static::class, $this->ID)->WasPublished;
-        }
-        return $isPublished;
-    }
-
-    public function wasPublished()
-    {
-        return (DB::prepared_query("SELECT \"ID\" FROM \"AccordionItem_Live\" WHERE \"ID\" = ?", array($this->ID))->value())
-            ? true
-            : false;
     }
 
 }
