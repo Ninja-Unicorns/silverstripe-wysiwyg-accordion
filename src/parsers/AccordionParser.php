@@ -1,5 +1,13 @@
 <?php
 
+namespace NinjaUnicorns\WysiwygAccordion\Parsers;
+
+use SilverStripe\Control\Controller;
+use SilverStripe\View\SSViewer;
+use SilverStripe\View\ArrayData;
+use PageController;
+use Page;
+
 /**
  * Class AccordionParser
  *
@@ -31,11 +39,11 @@ class AccordionParser
     public static function handle_shortcode($arguments, $code, $parser, $shortcode, $extra = array())
     {
         // page controller, this is the default case
-        if (Controller::curr() instanceof Page_Controller) {
+        if (Controller::curr() instanceof PageController) {
             // Only if we're on a Page, so the CMS doesn't crash.
             $page = Controller::curr()->dataRecord;
-        } // attempt to load page via custom loader
-        else {
+        } else {
+            // attempt to load page via custom loader
             $page = static::$page;
         }
 
@@ -48,16 +56,17 @@ class AccordionParser
         $template = 'AccordionItems';
         $ssViewer = new SSViewer($template);
         if (array_key_exists('id', $arguments)) {
-            $accordion = ArrayData::create([
-                'AccordionId'    => $arguments['id'],
-                'AccordionItems' => $page->AccordionItems()->filter(['AccordionSet' => $arguments['id']])
-            ]);
+            $accordion = ArrayData::create(
+                [
+                    'AccordionId'    => $arguments['id'],
+                    'AccordionItems' => $page->AccordionItems()->filter(['AccordionSet' => $arguments['id']])
+                ]
+            );
 
             return $ssViewer->process($accordion);
         }
 
         return '';
-
     }
 
     /**

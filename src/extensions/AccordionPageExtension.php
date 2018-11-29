@@ -1,5 +1,17 @@
 <?php
 
+namespace NinjaUnicorns\WysiwygAccordion\Extensions;
+
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\View\Requirements;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
+use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
+use SilverStripe\Lumberjack\Forms\GridFieldSiteTreeState;
+use SilverStripe\Forms\GridField\GridField;
+use NinjaUnicorns\WysiwygAccordion\Models\AccordionItem;
 
 /**
  * Class AccordionPageExtension
@@ -9,10 +21,14 @@
  */
 class AccordionPageExtension extends DataExtension
 {
-    private static $description = '<p><h4>Note</h4>Create Accordion items here, the title will be the header and the content will show on click.<br />To add the accordion in the content, put <strong>[accordion,id=1]</strong> in the WYSIWYG editor at the place where you want the accordion to appear.<br /><u>Replace the 1 with the actual set you want to render.</u></p>';
+    private static $helpDescription = '<p><h4>Note</h4>Create Accordion items here, 
+    the title will be the header and the content will show on click.<br />To add the
+     accordion in the content, put <strong>[accordion,id=1]</strong> in the WYSIWYG 
+     editor at the place where you want the accordion to appear.<br /><u>Replace
+      the 1 with the actual set you want to render.</u></p>';
 
     private static $has_many = [
-        'AccordionItems' => 'AccordionItem'
+        'AccordionItems' => AccordionItem::class
     ];
 
     public function updateCMSFields(FieldList $fields)
@@ -23,7 +39,7 @@ class AccordionPageExtension extends DataExtension
 
         $blacklistedPages = Config::inst()->get(self::class, 'PageBlacklist') ?: [];
         if (!count($blacklistedPages) || !in_array($this->owner->ClassName, $blacklistedPages, true)) {
-            $helptext = _t('Accordion.HELP', self::$description);
+            $helptext = _t('Accordion.HELP', self::$helpDescription);
             $helpField = LiteralField::create('Help', $helptext);
             $gridFieldConfig = GridFieldConfig_RecordEditor::create();
             $gridFieldConfig->addComponent(new GridFieldOrderableRows('SortOrder'));
@@ -31,12 +47,15 @@ class AccordionPageExtension extends DataExtension
                 $gridFieldConfig->addComponent(new GridFieldSiteTreeState());
             }
             $accordionGrid = GridField::create(
-                'AccordionItems', 'AccordionItems', $this->owner->AccordionItems(),
+                'AccordionItems',
+                'AccordionItems',
+                $this->owner->AccordionItems(),
                 $gridFieldConfig
             );
             $gridFieldConfig->removeComponentsByType('GridFieldAddExistingAutocompleter');
             $fields->addFieldsToTab(
-                'Root.Accordion', [
+                'Root.Accordion',
+                [
                     $helpField,
                     $accordionGrid
                 ]

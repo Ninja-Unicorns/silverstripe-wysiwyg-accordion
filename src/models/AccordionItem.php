@@ -1,5 +1,13 @@
 <?php
 
+namespace NinjaUnicorns\WysiwygAccordion\Models;
+
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\ORM\DB;
+use SilverStripe\Versioned\Versioned;
+use Page;
+
 /**
  * Class AccordionItem
  *
@@ -14,6 +22,8 @@
  */
 class AccordionItem extends DataObject
 {
+    private static $table_name = 'AccordionItem';
+
     private static $db = [
         'Title'        => 'Varchar(255)',
         'Content'      => 'HTMLText',
@@ -22,7 +32,7 @@ class AccordionItem extends DataObject
     ];
 
     private static $has_one = [
-        'Page' => 'Page'
+        'Page' => Page::class
     ];
 
     /**
@@ -44,15 +54,20 @@ class AccordionItem extends DataObject
         $fields->addFieldToTab('Root.Main', LiteralField::create('message', '<h5></h5>'), 'Title');
         /** @var $accordion NumericField */
         $accordion = $fields->fieldByName('Root.Main.AccordionSet');
-        $description = 'All items that share the same accordion have to have the same accordion ID, accordion shortcode is [accordion,id=ID]<br /><br /><strong>Important:</strong> Do not attempt to add an accordionset with the same ID as this accordion in the content.';
+        $description = 'All items that share the same accordion have to have
+         the same accordion ID, accordion shortcode is [accordion,id=ID]
+         <br /><br /><strong>Important:</strong> Do not attempt to add an
+          accordionset with the same ID as this accordion in the content.';
         $accordionIds = $this->Page()->AccordionItems()->column('AccordionSet');
 
         if (count($accordionIds) > 0) {
             $accordionIds = array_unique($accordionIds);
             sort($accordionIds, SORT_NUMERIC);
 
-            $description .= '<br /><br />This page currently has following accordion IDs: ' . implode(', ',
-                    $accordionIds);
+            $description .= '<br /><br />This page currently has following accordion IDs: ' . implode(
+                ', ',
+                $accordionIds
+            );
         }
 
         $accordion->setDescription($description);
@@ -103,8 +118,10 @@ class AccordionItem extends DataObject
             return false;
         }
 
-        $isPublished = DB::prepared_query('SELECT "ID" FROM "AccordionItem_Live" WHERE "ID" = ?',
-            array($this->ID))->value();
+        $isPublished = DB::prepared_query(
+            'SELECT "ID" FROM "AccordionItem_Live" WHERE "ID" = ?',
+            array($this->ID)
+        )->value();
         if ($isPublished) {
             return Versioned::get_latest_version(static::class, $this->ID)->WasPublished;
         }
@@ -133,5 +150,4 @@ class AccordionItem extends DataObject
 
         return stripos($this->ID, 'new') === 0;
     }
-
 }

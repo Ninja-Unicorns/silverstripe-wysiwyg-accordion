@@ -4,9 +4,9 @@
 
 ## Requirements
 
-SilverStripe Framework `>3.2 <4.0`
+SilverStripe Framework `^4.2`
 
-SilverStripe CMS `>3.2 <4.0`
+SilverStripe CMS `^4.2`
 
 ## Usage
 
@@ -16,10 +16,11 @@ The items can be ordered using drag-and-drop on the gridfield overview.
 
 If you don't want the accordion option on certain pages, add the blacklisted pagetypes to your yml like this:
 ```yaml
-AccordionPageExtension:
+NinjaUnicorns\WysiwygAccordion\Extensions\AccordionPageExtension:
   PageBlacklist:
-    - HomePage
+    - MyApp\Pages\HomePage
 ```
+**Reminder:** If you use namespacing don't forget to use the full namespace for the page.
 
 ## Reason
 

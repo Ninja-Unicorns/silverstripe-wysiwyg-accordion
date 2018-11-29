@@ -1,5 +1,12 @@
 <?php
 
+namespace NinjaUnicorns\WysiwygAccordion\Tests\Unit;
+
+use SilverStripe\Dev\SapphireTest;
+use NinjaUnicorns\WysiwygAccordion\Parsers\AccordionParser;
+use SilverStripe\View\Parsers\ShortcodeParser;
+use NinjaUnicorns\WysiwygAccordion\Models\AccordionItem;
+use Page;
 
 class AccordionTest extends SapphireTest
 {
@@ -8,9 +15,9 @@ class AccordionTest extends SapphireTest
 
     public function testAccordionConnected()
     {
-        $page = $this->objFromFixture('Page', 'page1');
-        $this->objFromFixture('AccordionItem', 'item1');
-        $this->objFromFixture('AccordionItem', 'item2');
+        $page = $this->objFromFixture(Page::class, 'page1');
+        $this->objFromFixture(AccordionItem::class, 'item1');
+        $this->objFromFixture(AccordionItem::class, 'item2');
 
         $this->assertEquals(2, (int)$page->AccordionItems()->count());
     }
@@ -18,10 +25,10 @@ class AccordionTest extends SapphireTest
     public function testAccordionOutput()
     {
         /** @var $page Page */
-        $page = $this->objFromFixture('Page', 'page1');
+        $page = $this->objFromFixture(Page::class, 'page1');
         $page->Content = '[accordion id=1]';
-        $this->objFromFixture('AccordionItem', 'item1');
-        $this->objFromFixture('AccordionItem', 'item2');
+        $this->objFromFixture(AccordionItem::class, 'item1');
+        $this->objFromFixture(AccordionItem::class, 'item2');
 
         AccordionParser::setPage($page);
         $html = ShortcodeParser::get_active()->parse($page->Content);
