@@ -2,7 +2,7 @@ Page:
   page1:
     Title: 'TestPage'
     Content: ""
-AccordionItem:
+NinjaUnicorns\WysiwygAccordion\Models\AccordionItem:
   item1:
     Title: 'AccordionItem1'
     Content: 'Hello'

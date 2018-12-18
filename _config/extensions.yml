@@ -1,6 +1,9 @@
+---
+Name: wysiwyg-accordion-extensions
+---
 Page:
   extensions:
-    - AccordionPageExtension
-AccordionItem:
+    - NinjaUnicorns\WysiwygAccordion\Extensions\AccordionPageExtension
+NinjaUnicorns\WysiwygAccordion\Models\AccordionItem:
   extensions:
-    - Versioned
+    - SilverStripe\Versioned\Versioned
