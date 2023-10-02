@@ -65,9 +65,9 @@ class AccordionItem extends DataObject
             sort($accordionIds, SORT_NUMERIC);
 
             $description .= '<br /><br />This page currently has following accordion IDs: ' . implode(
-                ', ',
-                $accordionIds
-            );
+                    ', ',
+                    $accordionIds
+                );
         }
 
         $accordion->setDescription($description);
@@ -105,6 +105,13 @@ class AccordionItem extends DataObject
         if ($this->isPublished()) {
             $this->deleteFromStage('Live');
         }
+    }
+
+    public function onBeforeWrite()
+    {
+        $this->handleNewItemSorting();
+
+        parent::onBeforeWrite();
     }
 
     /**
@@ -149,5 +156,20 @@ class AccordionItem extends DataObject
         }
 
         return stripos($this->ID, 'new') === 0;
+    }
+
+    private function handleNewItemSorting()
+    {
+        if ($this->SortOrder) {
+            return;
+        }
+
+        $items = $this->Page()->AccordionItems();
+
+        if (!($items instanceof DataList)) {
+            return;
+        }
+
+        $this->SortOrder = $items->max('Sort') + 1;
     }
 }
