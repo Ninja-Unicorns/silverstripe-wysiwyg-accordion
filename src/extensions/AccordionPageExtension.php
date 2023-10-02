@@ -21,6 +21,8 @@ use NinjaUnicorns\WysiwygAccordion\Models\AccordionItem;
  */
 class AccordionPageExtension extends DataExtension
 {
+    CONST NUMBER_OF_ITEMS_PER_PAGE = 20;
+
     private static $helpDescription = '<p><h4>Note</h4>Create Accordion items here, 
     the title will be the header and the content will show on click.<br />To add the
      accordion in the content, put <strong>[accordion,id=1]</strong> in the WYSIWYG 
@@ -60,6 +62,10 @@ class AccordionPageExtension extends DataExtension
                     $accordionGrid
                 ]
             );
+
+            $gridFieldConfig
+                ->getComponentByType(GridFieldPage::class)
+                ->setItemsPerPage(self::NUMBER_OF_ITEMS_PER_PAGE); // Change 20 to your desired number
         }
     }
 }
